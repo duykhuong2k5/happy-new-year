@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chúc Mừng Năm Mới 2025</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            height: 100%;
+            background-color: #000;
+        }
+
+        .content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            text-align: center;
+            z-index: 10;
+            font-family: 'Arial', sans-serif;
+        }
+
+        h1 {
+            font-size: 4em;
+            color: #f39c12;
+            text-transform: uppercase;
+        }
+
+        h2 {
+            font-size: 2.5em;
+            color: #ecf0f1;
+            margin-top: 20px;
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.2em;
+            color: #f39c12;
+        }
+
+        #imageContainer {
+            margin-top: 20px;
+        }
+
+        #uploadedImage {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: none;
+            z-index: 5;
+        }
+
+        #uploadButton {
+            background-color: #f39c12;
+            color: #fff;
+            padding: 10px 20px;
+            font-size: 1.5em;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            z-index: 10;
+        }
+
+        #uploadButton:hover {
+            background-color: #e67e22;
+        }
+
+        #giaLocText {
+            font-size: 3em;
+            color: #ff6347;
+            display: none; /* Ẩn chữ Gia Lộc ban đầu */
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 15; /* Đảm bảo chữ "Gia Lộc" luôn nằm trên cùng */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="content">
+        <h1 id="titleText">Chúc Mừng Năm Mới 2025!</h1>
+        <h2 id="subtitleText">Chúc chị một năm mới thịnh vượng, hạnh phúc và đầy may mắn!</h2>
+        <button id="uploadButton">Bấm vào đi sẽ có bất ngờ</button>
+    </div>
+
+    <div class="footer">
+        <p>Chúc chị một năm mới rực rỡ và đầy niềm vui!</p>
+    </div>
+
+    <img id="uploadedImage" src="C:\Users\KHUONG\Downloads\467820183_1277693546829459_3546138826587213883_n.jpg" alt="Hình ảnh tải lên sẽ xuất hiện ở đây!">
+
+    <h2 id="giaLocText">piàoliang</h2> 
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        // Thiết lập cảnh
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        // Tạo các hạt (Hiệu ứng pháo hoa)
+        const particleCount = 3000;
+        const particles = new THREE.BufferGeometry();
+        const positions = new Float32Array(particleCount * 3);
+        const velocities = new Float32Array(particleCount * 3);
+        const colors = [];
+        const colorsArray = [
+            new THREE.Color(0xff0000),  // Đỏ
+            new THREE.Color(0x00ff00),  // Xanh lá
+            new THREE.Color(0x0000ff),  // Xanh dương
+            new THREE.Color(0xffff00),  // Vàng
+            new THREE.Color(0xff00ff),  // Hồng
+            new THREE.Color(0x00ffff),  // Cyan
+            new THREE.Color(0xffffff),  // Trắng
+        ];
+
+        for (let i = 0; i < particleCount; i++) {
+            positions[i * 3] = Math.random() * 2 - 1;  // X
+            positions[i * 3 + 1] = Math.random() * 2 - 1;  // Y
+            positions[i * 3 + 2] = Math.random() * 2 - 1;  // Z
+            velocities[i * 3] = Math.random() * 0.3 - 0.15;  // VX
+            velocities[i * 3 + 1] = Math.random() * 0.5 - 0.25;  // VY
+            velocities[i * 3 + 2] = Math.random() * 0.3 - 0.15;  // VZ
+
+            const color = colorsArray[Math.floor(Math.random() * colorsArray.length)];
+            colors.push(color.r, color.g, color.b);
+        }
+
+        particles.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        particles.setAttribute('velocity', new THREE.BufferAttribute(velocities, 3));
+        particles.setAttribute('color', new THREE.BufferAttribute(new Float32Array(colors), 3));
+
+        const material = new THREE.PointsMaterial({
+            size: 0.1,  // Giảm kích thước hạt
+            vertexColors: true,
+            blending: THREE.AdditiveBlending,
+            transparent: true,
+            opacity: 0.8,
+        });
+
+        const particleSystem = new THREE.Points(particles, material);
+        scene.add(particleSystem);
+
+        // Đặt vị trí camera
+        camera.position.z = 5;
+
+        // Vòng lặp hoạt ảnh
+        function animate() {
+            requestAnimationFrame(animate);
+
+            const positions = particleSystem.geometry.attributes.position.array;
+            const velocities = particleSystem.geometry.attributes.velocity.array;
+
+            for (let i = 0; i < particleCount; i++) {
+                positions[i * 3] += velocities[i * 3];
+                positions[i * 3 + 1] += velocities[i * 3 + 1];
+                positions[i * 3 + 2] += velocities[i * 3 + 2];
+
+                // Tạo hiệu ứng tàn lụi cho pháo hoa
+                if (positions[i * 3 + 1] < -2) {
+                    positions[i * 3 + 1] = 2;
+                    velocities[i * 3 + 1] = Math.random() * 0.5 - 0.25;
+                }
+            }
+
+            particleSystem.geometry.attributes.position.needsUpdate = true;
+            renderer.render(scene, camera);
+        }
+
+        animate();
+
+        // Xử lý sự kiện thay đổi kích thước cửa sổ
+        window.addEventListener('resize', () => {
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+        });
+
+        // Xử lý sự kiện bấm nút để hiển thị hình ảnh, thay đổi văn bản và ẩn nút
+        const uploadButton = document.getElementById('uploadButton');
+        const uploadedImage = document.getElementById('uploadedImage');
+        const titleText = document.getElementById('titleText');
+        const subtitleText = document.getElementById('subtitleText');
+        const giaLocText = document.getElementById('giaLocText');
+
+        uploadButton.addEventListener('click', () => {
+            // Ẩn các chữ ban đầu và nút
+            titleText.style.display = 'none';
+            subtitleText.style.display = 'none';
+            uploadButton.style.display = 'none';
+
+            // Hiển thị hình ảnh
+            uploadedImage.style.display = 'block';
+
+            // Hiển thị chữ "Gia Lộc"
+            giaLocText.style.display = 'block';
+
+            // Để chữ "Gia Lộc" nhấp nháy
+            setInterval(() => {
+                giaLocText.style.opacity = (giaLocText.style.opacity === '1') ? '0' : '1';
+            }, 500);
+        });
+    </script>
+</body>
+</html>
